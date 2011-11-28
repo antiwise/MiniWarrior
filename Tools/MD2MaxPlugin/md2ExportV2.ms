@@ -173,7 +173,7 @@ fn makemd2 object=
 	(
 		local vertlist=#()
 		local normlist=#()
-		frame=MD2_frame scale:[1,1,1] translate:[0,0,0] name:gframename
+		frame=MD2_frame scale:[1,1,1] translate:[0,0,0] name:"FRAME          "
 		vmin=[0,0,0]
 		vmax=[0,0,0]
 			
