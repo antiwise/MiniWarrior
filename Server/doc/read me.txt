@@ -1,0 +1,9 @@
+1.配置java环境，JDK1.5以上和安装MYSQL5.0(配置好java的环境变量)
+2.在SQL文件里，把role.sql，sql.sql，insert.sql按照这个顺利插进MYSQL数据库里
+3.修改FlashNetGame\classes文件夹下面的hibernate.cfg.xml文件，修改里面的数据库连接地址和用户密码什么的
+4.把NetGameFalsh文件夹里面的NetGame.swf的打包成.exe文件（如果你的电脑是可信任flash的就不需要）
+5.下载spring和hibernate的包，然后把相关的jar文件放到FlashNetGame目录的lib文件夹下
+6.准备好上面的那些工作之后，在FlashNetGame目录那里的build.xml文件，用ant编译
+（如果没有装ant，可以执行org.game.server.StartServer这个主类，就可以启动服务器了）
+7.把NetGameFalsh文件里面的NetGame.swf打包成exe文件（主要是flash的安全策略，如果你配置了你电脑，就不需要）
+8.连接服务器，用内带的用户登陆就可以了（帐户:soda,密码:soda），或者可以在数据库手动添加
