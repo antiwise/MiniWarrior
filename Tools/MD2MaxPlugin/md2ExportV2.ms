@@ -6,7 +6,7 @@
 --New: Added Export Support for multiple object/mesh selections
 -------------------------------------------------------------------------
 
-global gframename = "..............."
+global gframename = "idle..........."
 global gAnimations = #()
 
 global md2lastfile=""
@@ -466,22 +466,22 @@ utility MD2Export "MD2 Exporter V2.0"
 	
 	on bexport pressed do
 	( 
-		if (gAnimations.count < 1) then
+		if not(oneframe.state) do 
 		(
-			Messagebox "There is no frame !"
+			anim = AnimS()
+			anim.name=gframename
+			anim.start=1
+			anim.end=1
+			anim.step = stepframe.value
+			append gAnimations anim
 		)
-		else
-		(
-			md2filename=getsavefilename caption:"Save MD2" filename:md2lastfile types:"Blitz MD2 (*.md2)|*.md2|All Files (*.*)|*.*|"
 			
-			if md2filename!=undefined do 
-			(				
-				addcheck (writemd2 $ md2filename)
-				md2lastfile=md2filename
-			)
+		md2filename=getsavefilename caption:"Save MD2" filename:md2lastfile types:"Blitz MD2 (*.md2)|*.md2|All Files (*.*)|*.*|"
 			
-			Messagebox "Export Success !"
+		if md2filename!=undefined do 
+		(				
+			addcheck (writemd2 $ md2filename)
+			md2lastfile=md2filename
 		)
-		
 	)
 )
