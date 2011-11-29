@@ -6,7 +6,9 @@
 --New: Added Export Support for multiple object/mesh selections
 -------------------------------------------------------------------------
 
-global gframename = ""
+global gframename = "..............."
+global gAnimations = #()
+
 global md2lastfile=""
 global MD2Export
 global nlist=#([-0.525731, 0.000000, 0.850651],[-0.442863, 0.238856, 0.864188],[-0.295242, 0.000000, 0.955423],[-0.309017, 0.500000, 0.809017],[-0.162460, 0.262866, 0.951056],[0.000000, 0.000000, 1.000000],[0.000000, 0.850651, 0.525731],[-0.147621, 0.716567, 0.681718],[0.147621, 0.716567, 0.681718],[0.000000, 0.525731, 0.850651],[0.309017, 0.500000, 0.809017],[0.525731, 0.000000, 0.850651],[0.295242, 0.000000, 0.955423],[0.442863, 0.238856, 0.864188],[0.162460, 0.262866, 0.951056],[-0.681718, 0.147621, 0.716567],[-0.809017, 0.309017, 0.500000],[-0.587785, 0.425325, 0.688191],[-0.850651, 0.525731, 0.000000],[-0.864188, 0.442863, 0.238856],[-0.716567, 0.681718, 0.147621],[-0.688191, 0.587785, 0.425325],[-0.500000, 0.809017, 0.309017],[-0.238856, 0.864188, 0.442863],[-0.425325, 0.688191, 0.587785],[-0.716567, 0.681718, -0.147621],[-0.500000, 0.809017, -0.309017],[-0.525731, 0.850651, 0.000000],[0.000000, 0.850651, -0.525731],[-0.238856, 0.864188, -0.442863],[0.000000, 0.955423, -0.295242],[-0.262866, 0.951056, -0.162460],[0.000000, 1.000000, 0.000000],[0.000000, 0.955423, 0.295242],[-0.262866, 0.951056, 0.162460],[0.238856, 0.864188, 0.442863],[0.262866, 0.951056, 0.162460],[0.500000, 0.809017, 0.309017],[0.238856, 0.864188, -0.442863],[0.262866, 0.951056, -0.162460],[0.500000, 0.809017, -0.309017],[0.850651, 0.525731, 0.000000],[0.716567, 0.681718, 0.147621],[0.716567, 0.681718, -0.147621],[0.525731, 0.850651, 0.000000],[0.425325, 0.688191, 0.587785],[0.864188, 0.442863, 0.238856],[0.688191, 0.587785, 0.425325],[0.809017, 0.309017, 0.500000],[0.681718, 0.147621, 0.716567],[0.587785, 0.425325, 0.688191],[0.955423, 0.295242, 0.000000],[1.000000, 0.000000, 0.000000],[0.951056, 0.162460, 0.262866],[0.850651, -0.525731, 0.000000],[0.955423, -0.295242, 0.000000],[0.864188, -0.442863, 0.238856],[0.951056, -0.162460, 0.262866],[0.809017, -0.309017, 0.500000],[0.681718, -0.147621, 0.716567],[0.850651, 0.000000, 0.525731],[0.864188, 0.442863, -0.238856],[0.809017, 0.309017, -0.500000],[0.951056, 0.162460, -0.262866],[0.525731, 0.000000, -0.850651],[0.681718, 0.147621, -0.716567],[0.681718, -0.147621, -0.716567],[0.850651, 0.000000, -0.525731],[0.809017, -0.309017, -0.500000],[0.864188, -0.442863, -0.238856],[0.951056, -0.162460, -0.262866],[0.147621, 0.716567, -0.681718],[0.309017, 0.500000, -0.809017],[0.425325, 0.688191, -0.587785],[0.442863, 0.238856, -0.864188],[0.587785, 0.425325, -0.688191],[0.688191, 0.587785, -0.425325],[-0.147621, 0.716567, -0.681718],[-0.309017, 0.500000, -0.809017],[0.000000, 0.525731, -0.850651],[-0.525731, 0.000000, -0.850651],[-0.442863, 0.238856, -0.864188],[-0.295242, 0.000000, -0.955423],[-0.162460, 0.262866, -0.951056],[0.000000, 0.000000, -1.000000],[0.295242, 0.000000, -0.955423],[0.162460, 0.262866, -0.951056],[-0.442863, -0.238856, -0.864188],[-0.309017, -0.500000, -0.809017],[-0.162460, -0.262866, -0.951056],[0.000000, -0.850651, -0.525731],[-0.147621, -0.716567, -0.681718],[0.147621, -0.716567, -0.681718],[0.000000, -0.525731, -0.850651],[0.309017, -0.500000, -0.809017],[0.442863, -0.238856, -0.864188],[0.162460, -0.262866, -0.951056],[0.238856, -0.864188, -0.442863],[0.500000, -0.809017, -0.309017],[0.425325, -0.688191, -0.587785],[0.716567, -0.681718, -0.147621],[0.688191, -0.587785, -0.425325],[0.587785, -0.425325, -0.688191],[0.000000, -0.955423, -0.295242],[0.000000, -1.000000, 0.000000],[0.262866, -0.951056, -0.162460],[0.000000, -0.850651, 0.525731],[0.000000, -0.955423, 0.295242],[0.238856, -0.864188, 0.442863],[0.262866, -0.951056, 0.162460],[0.500000, -0.809017, 0.309017],[0.716567, -0.681718, 0.147621],[0.525731, -0.850651, 0.000000],[-0.238856, -0.864188, -0.442863],[-0.500000, -0.809017, -0.309017],[-0.262866, -0.951056, -0.162460],[-0.850651, -0.525731, 0.000000],[-0.716567, -0.681718, -0.147621],[-0.716567, -0.681718, 0.147621],[-0.525731, -0.850651, 0.000000],[-0.500000, -0.809017, 0.309017],[-0.238856, -0.864188, 0.442863],[-0.262866, -0.951056, 0.162460],[-0.864188, -0.442863, 0.238856],[-0.809017, -0.309017, 0.500000],[-0.688191, -0.587785, 0.425325],[-0.681718, -0.147621, 0.716567],[-0.442863, -0.238856, 0.864188],[-0.587785, -0.425325, 0.688191],[-0.309017, -0.500000, 0.809017],[-0.147621, -0.716567, 0.681718],[-0.425325, -0.688191, 0.587785],[-0.162460, -0.262866, 0.951056],[0.442863, -0.238856, 0.864188],[0.162460, -0.262866, 0.951056],[0.309017, -0.500000, 0.809017],[0.147621, -0.716567, 0.681718],[0.000000, -0.525731, 0.850651],[0.425325, -0.688191, 0.587785],[0.587785, -0.425325, 0.688191],[0.688191, -0.587785, 0.425325],[-0.955423, 0.295242, 0.000000],[-0.951056, 0.162460, 0.262866],[-1.000000, 0.000000, 0.000000],[-0.850651, 0.000000, 0.525731],[-0.955423, -0.295242, 0.000000],[-0.951056, -0.162460, 0.262866],[-0.864188, 0.442863, -0.238856],[-0.951056, 0.162460, -0.262866],[-0.809017, 0.309017, -0.500000],[-0.864188, -0.442863, -0.238856],[-0.951056, -0.162460, -0.262866],[-0.809017, -0.309017, -0.500000],[-0.681718, 0.147621, -0.716567],[-0.681718, -0.147621, -0.716567],[-0.850651, 0.000000, -0.525731],[-0.688191, 0.587785, -0.425325],[-0.587785, 0.425325, -0.688191],[-0.425325, 0.688191, -0.587785],[-0.425325, -0.688191, -0.587785],[-0.587785, -0.425325, -0.688191],[-0.688191, -0.587785, -0.425325])
@@ -46,24 +48,16 @@ struct MD2_model
 	framelist
 )
 
+struct AnimS
+(
+	name,
+	start,
+	end,
+	step
+)
+
 fn makemd2 object=
 (	
-	if md2export.useanim.state==1 then 
-	(
-		astart=animationrange.start
-		aend=animationrange.end
-	)
-	else
-	(
-		astart=md2export.animstart.value
-		aend=md2export.animend.value
-	)	
-	if not(md2export.oneframe.state) do 
-	(
-		astart=1
-		aend=1
-	)
-
 	
 	md2=md2_model skinlist:#("SkinBitMap") texlist:#() trilist:#() framelist:#()
 
@@ -168,74 +162,79 @@ fn makemd2 object=
 	-------------------------------------
 	-- build frame list
 	-------------------------------------
-
-	for f=astart to aend by md2export.stepframe.value do 
+	for anim in gAnimations do
 	(
-		local vertlist=#()
-		local normlist=#()
-		frame=MD2_frame scale:[1,1,1] translate:[0,0,0] name:"FRAME          "
-		vmin=[0,0,0]
-		vmax=[0,0,0]
-			
-		for k = 1 to $selection.count do 
+		astart = anim.start
+		aend = anim.end
+		for f=astart to aend by anim.step do 
 		(
-			obj=	$selection[k]	
-			for i=1 to obj.numverts do at time f
+			local vertlist=#()
+			local normlist=#()
+			frame=MD2_frame scale:[1,1,1] translate:[0,0,0] name:anim.name
+			vmin=[0,0,0]
+			vmax=[0,0,0]
+				
+			for k = 1 to $selection.count do 
 			(
-				local v=in coordsys world(getvert obj i)
-				--v+=object.pos
-				--v*=object.scale
-				--v-=object.pos
-				if v.x<vmin.x do vmin.x=v.x
-				if v.y<vmin.y do vmin.y=v.y
-				if v.z<vmin.z do vmin.z=v.z
-				if v.x>vmax.x do vmax.x=v.x
-				if v.y>vmax.y do vmax.y=v.y
-				if v.z>vmax.z do vmax.z=v.z	
-			)
-		)
-		frame.translate=vmin
-		frame.scale=(vmax-vmin)/[255,255,255]
-	
-		for k = 1 to $selection.count do 
-		(
-			obj=	$selection[k]
-			for i=1 to obj.numverts do at time f
-			(
-				local v=in coordsys world (getvert obj i)
-				--v+=object.pos
-				--v*=object.scale
-				--v-=object.pos
-				v-=frame.translate
-				v/=frame.scale
-				append vertlist v
-				
-				------------------------------------
-				--do normals
-				------------------------------------
-				
-				local vn=in coordsys world (getnormal obj i)
-				local maxdot=-99999.0
-				local normindex=1
-				
-				if md2export.donormals.state do
-				for j=1 to nlist.count do
+				obj=	$selection[k]	
+				for i=1 to obj.numverts do at time f
 				(
-					local dotvalue
-					dotvalue=dot nlist[j] vn
-					if dotvalue>maxdot do
-					(
-						maxdot=dotvalue
-						normindex=j
-					)
+					local v=in coordsys world(getvert obj i)
+					--v+=object.pos
+					--v*=object.scale
+					--v-=object.pos
+					if v.x<vmin.x do vmin.x=v.x
+					if v.y<vmin.y do vmin.y=v.y
+					if v.z<vmin.z do vmin.z=v.z
+					if v.x>vmax.x do vmax.x=v.x
+					if v.y>vmax.y do vmax.y=v.y
+					if v.z>vmax.z do vmax.z=v.z	
 				)
-				append normlist normindex 
 			)
+			frame.translate=vmin
+			frame.scale=(vmax-vmin)/[255,255,255]
+		
+			for k = 1 to $selection.count do 
+			(
+				obj=	$selection[k]
+				for i=1 to obj.numverts do at time f
+				(
+					local v=in coordsys world (getvert obj i)
+					--v+=object.pos
+					--v*=object.scale
+					--v-=object.pos
+					v-=frame.translate
+					v/=frame.scale
+					append vertlist v
+					
+					------------------------------------
+					--do normals
+					------------------------------------
+					
+					local vn=in coordsys world (getnormal obj i)
+					local maxdot=-99999.0
+					local normindex=1
+					
+					if md2export.donormals.state do
+					for j=1 to nlist.count do
+					(
+						local dotvalue
+						dotvalue=dot nlist[j] vn
+						if dotvalue>maxdot do
+						(
+							maxdot=dotvalue
+							normindex=j
+						)
+					)
+					append normlist normindex 
+				)
+			)
+			frame.vList=vertlist
+			frame.vNorm=normlist
+			append md2.framelist frame
 		)
-		frame.vList=vertlist
-		frame.vNorm=normlist
-		append md2.framelist frame
-	)	
+	)
+		
 	md2
 )
 
@@ -368,6 +367,7 @@ fn writemd2 obj md2file=
 	fclose f
 )
 
+
 utility MD2Export "MD2 Exporter V2.0"
 (
 	group "Export"
@@ -377,27 +377,101 @@ utility MD2Export "MD2 Exporter V2.0"
 		radiobuttons useanim labels:#("Active Time Segment","Custom Time Segment")
 		spinner animstart range:[0,1000,0] type:#integer fieldwidth:40 across:2
 		spinner animend "to" range:[0,1000,40] type:#integer fieldwidth:40
+	
 		edittext 	frameName "Frame Name:" labelOnTop:true
 		checkbox donormals "Generate Normals" align:#center checked:false
+		
+		button btnAddFrame "Add" pos:[12,190] width:56 height:18
+		button btnRemoveFrame "Remove" pos:[80,190] width:64 height:18
+		
+		listbox lbxNodes "Frame to export:" pos:[8,210] width:144 height:8
+		
+		
 		button bexport "     Export    "
 	)
+	
 	group "About"
 	(
-		label titleLabel	"MD2 Exporter v2.0"
-		HyperLink addy "by Adam Barton" align:#center address:"mailto:adam.add3d.co.uk" color:(color 0 100 0) hoverColor:(color 0 0 100)
-		HyperLink me "Updated by NIN-Ruiner" align:#center address:"http://www.netdoo.com/wodx/" color:(color 0 100 0) hoverColor:(color 0 0 100)
+		label titleLabel	"MD2 Exporter v3.0"
 	)
 	
-	on bexport pressed do
-	( 
+	on btnAddFrame pressed do
+	(
+		local fname = "..............."
+	
 		if (frameName.text == "" or frameName.text == undefined) then
 		(
 			Messagebox "Please give a frame name !"
 		)
 		else
 		(
-			gframename = frameName.text
+			local i ;		
+			i = 1 ;		
+			while (frameName.text[i] != undefined) do 
+			(
+				fname[i] = frameName.text[i]	
+				i = i + 1
+			)
+		)
+				
+		if((findItem lbxNodes.items fname) == 0) then
+		(
+			anim = AnimS()
+			anim.name=fname
+			if useanim.state==1 then 
+			(
+				anim.start=animationrange.start
+				anim.end=animationrange.end
+			)
+			else
+			(
+				anim.start=animstart.value 
+				anim.end=animend.value
+			)	
+			if not(oneframe.state) do 
+			(
+				anim.start=1
+				anim.end=1
+			)
+		
+			anim.step = stepframe.value
+			append gAnimations anim
+			lbxNodes.items += #(fname)
+		)
+		else
+		(
+			Messagebox "the frame has the same name !"
+		)
+	)
+	
+	on btnRemoveFrame pressed do
+	(
+		if (lbxNodes.items.count > 0) and (lbxNodes.selection > 0) do
+		(
+			local i ;		
+			i = 1 ;	
+			for anim in gAnimations do
+			(
+				if (anim.name == lbxNodes.items[lbxNodes.selection]) then
+				(			
+						deleteItem gAnimations i
+				)
+				i = i + 1
+			)
 			
+			deleteItem lbxNodes.items lbxNodes.selection
+			lbxNodes.items = lbxNodes.items
+		)
+	)
+	
+	on bexport pressed do
+	( 
+		if (gAnimations.count < 1) then
+		(
+			Messagebox "There is no frame !"
+		)
+		else
+		(
 			md2filename=getsavefilename caption:"Save MD2" filename:md2lastfile types:"Blitz MD2 (*.md2)|*.md2|All Files (*.*)|*.*|"
 			
 			if md2filename!=undefined do 
@@ -405,6 +479,8 @@ utility MD2Export "MD2 Exporter V2.0"
 				addcheck (writemd2 $ md2filename)
 				md2lastfile=md2filename
 			)
+			
+			Messagebox "Export Success !"
 		)
 		
 	)
