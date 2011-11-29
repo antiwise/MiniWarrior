@@ -61,7 +61,7 @@ package away3d.loaders.parsers
 		private var _uvs : Vector.<Number>;
 		private var _finalUV : Vector.<Number>;
 		
-		private var _materialNames : Vector.<String>;
+		private var _skindatas : Vector.<skindata>;
 		private var _textureType : String;
 		private var _ignoreTexturePath : Boolean;
 		private var _mesh : Mesh;
@@ -228,19 +228,18 @@ package away3d.loaders.parsers
 			var extIndex : int;
 			var slashIndex : int;
 			var vstart : uint, count : uint;
-			
-			_materialNames = new Vector.<String>();
+			_skindatas = new Vector.<skindata>(_numSkins, true);
 			_byteData.position = _offsetSkins;
 			
 			for (var i : uint = 0; i < _numSkins; ++i) {
-				name = _byteData.readUTFBytes(64);
-				vstart = _byteData.readUnsignedShort();
-				count = _byteData.readUnsignedShort();
-				//extIndex = name.lastIndexOf(".");
-				//if (_ignoreTexturePath) {
-				//	slashIndex = name.lastIndexOf("/");
-				//	if (slashIndex < 0) slashIndex = 0;
-				//}
+				var skin:skindata = new skindata;
+				skin.matname = _byteData.readUTFBytes(64);
+				skin.vstart = _byteData.readUnsignedShort();
+				skin.count = _byteData.readUnsignedShort();
+				slashIndex = skin.matname.indexOf(":");
+				skin.matname = skin.matname.substring(0, slashIndex);
+				
+				_skindatas[i] = skin;
 				
 				//name = name.substring(slashIndex+1, extIndex);
 				//url = name+"."+_textureType;
@@ -250,8 +249,6 @@ package away3d.loaders.parsers
 				//if (dependencies.length == 0)
 				//	addDependency(name, new URLRequest(url));
 			}
-			
-			//_mesh.material.name = _materialNames[0];
 		}
 		
 		/**
@@ -424,7 +421,89 @@ package away3d.loaders.parsers
 			finalizeAsset(_animator);
 			_parsedFrames = true;
 		}
-		
+		/**
+		 * Parses all the frame geometries.
+		 */
+		private function _parseFrames() : void
+		{
+			var sx : Number, sy : Number, sz : Number;
+			var tx : Number, ty : Number, tz : Number;
+			var geometry : Geometry;
+			var subGeom : SubGeometry;
+			var vertLen : uint = _vertIndices.length;
+			var fvertices : Vector.<Number>;
+			var tvertices : Vector.<Number>;
+			var i : uint, j : int, k : uint, ch : uint;
+			var name : String = "";
+			
+			_byteData.position = _offsetFrames;
+			
+			for (i = 0; i < _numFrames; i++) {
+				geometry = new Geometry();
+				
+				
+				subGeom = new SubGeometry();
+				_firstSubGeom ||= subGeom;				
+				geometry.addSubGeometry(subGeom);
+				tvertices = new Vector.<Number>();
+				fvertices = new Vector.<Number>(vertLen * 3, true);
+				
+				sx = _byteData.readFloat();
+				sy = _byteData.readFloat();
+				sz = _byteData.readFloat();
+				
+				tx = _byteData.readFloat();
+				ty = _byteData.readFloat();
+				tz = _byteData.readFloat();
+				
+				//read frame name
+				name = "";
+				k = 0;
+				for (j = 0; j < 16; j++) {
+					ch = _byteData.readUnsignedByte();
+					
+					if (uint(ch) >= 0x39 && uint(ch) <= 0x7A && k == 0) {
+						name += String.fromCharCode(ch);
+					}
+					
+					if (uint(ch) >= 0x30 && uint(ch) <= 0x39) {
+						k++;
+					}
+				}
+				
+				for (j = 0; j < _numVertices; j++) {
+					tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
+				}
+				
+				k = 0;
+				for (j = 0; j < vertLen; j++) {
+					fvertices[k++] = tvertices[uint(_vertIndices[j] * 3)];
+					fvertices[k++] = tvertices[uint(_vertIndices[j] * 3 + 2)];
+					fvertices[k++] = tvertices[uint(_vertIndices[j] * 3 + 1)];
+				}
+				
+				subGeom.updateVertexData(fvertices);
+				subGeom.updateUVData(_finalUV);
+				subGeom.updateIndexData(_indices);
+				
+				var seq : VertexAnimationSequence = VertexAnimationSequence(_animator.getSequence(name));
+				if (!seq) {
+					seq = new VertexAnimationSequence(name);
+					_animator.addSequence(seq);
+				}
+				seq.addFrame(geometry, 1000 / FPS);
+			}
+			
+			
+			finalizeAsset(_animator);
+			_parsedFrames = true;
+		}
 	}
 }
 
+class skindata
+{
+	public var matname : String;
+	public var vstart : uint;
+	public var count : uint;
+}
