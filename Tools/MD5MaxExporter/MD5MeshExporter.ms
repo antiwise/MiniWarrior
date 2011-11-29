@@ -1,6 +1,9 @@
 -- Developed by Jonathan "BeRSeRKeR" Garcia
 
 fileIn "helper_funcs.ms"	-- helper functions
+fileIn "MD5MaterialExporter.ms"	-- MD5MaterialExporter functions
+
+global gmaterials = #();
 
 struct sJoint
 (
@@ -83,6 +86,18 @@ struct MD5MeshExporter
 		return nSubMeshes
 	),
 
+	-- Function: findSubMeshByMatID
+	-- Description: find a submesh by its matID
+	-- Return: returns the submesh index. If the submesh was not found, returns 0
+	fn hasMaterial ms m =
+	(
+		for mtl in ms do
+		(
+			if m == mtl do return true
+		)
+		return false
+	),
+	
 	-- Function: collectSubMeshes
 	-- Description: collects the submeshes to export
 	-- Return: returns the submeshes array
@@ -97,6 +112,9 @@ struct MD5MeshExporter
 			append subMeshes (sSubMesh())
 			nSubMeshes = 1
 			subMeshes.shader = node.material.name
+			
+			local isok = hasMaterial gmaterials node.material
+			if isok == false do append gmaterials node.material
 		)
 		else	-- More than one mesh
 		(
@@ -129,6 +147,9 @@ struct MD5MeshExporter
 					(
 						-- The shader will be the name of the material
 						subMeshes[nSubMeshes].shader = node.material[matID].name
+					
+						local isok = hasMaterial gmaterials node.material[matID]
+						if isok == false do append gmaterials node.material[matID]
 					)
 					else	-- Error
 					(
@@ -158,7 +179,6 @@ struct MD5MeshExporter
 		)
 		return 0
 	),
-
 	-- Function: doExport
 	-- Description: exports the bones in the scene and the nodes in "nodeList" to "fileName" file
 	-- Return: returns true on success, otherwise returns false
@@ -217,10 +237,21 @@ struct MD5MeshExporter
 		)
 
 		-- Write md5mesh header --
-	
+		local mtlfile
+		for i=1 to fileName.count do
+		(
+			if (fileName[i] == "\\") do 
+			(
+				local x = i + 1
+				mtlfile = substring fileName x -1
+			)
+		)		
+		append mtlfile ".mtl"
+		
 		format "MD5Version 10\n" to: fp
 		format "commandline \"\"\n\n" to: fp
 		
+		format "mtllib %\n" mtlfile to: fp
 		format "numJoints %\n" joints.count to: fp
 		format "numMeshes %\n\n" (countSubMeshes nodeList) to: fp
 	
@@ -271,7 +302,7 @@ struct MD5MeshExporter
 
 			-- Collects submeshes
 			subMeshes = collectSubMeshes node mesh
-
+			
 			-- Error. No submeshes found
 			if subMeshes == undefined do
 			(
@@ -449,7 +480,11 @@ struct MD5MeshExporter
 			-- Call the garbage collector
 			gc()
 		)
-
+		
+		local mtlfullfile = fileName
+		append mtlfullfile ".mtl"
+		exportSelectMaterials gmaterials mtlfullfile
+	
 		-- Clear MAX selection
 		clearSelection()
 

@@ -13,7 +13,7 @@ package
 		public function MiniWarrior()
 		{
 			//客户端连接成功或者失败后，会调用该事件
-			netConnect.onConnect = function(msg:String)
+			netConnect.onConnect = function(msg:String):void
 			{
 				//trace("msg:" + msg);
 				if(msg == "connect success")
@@ -29,12 +29,12 @@ package
 			}
 			
 			
-			receice.onResult = function(num:Number)
+			receice.onResult = function(num:Number):void
 			{
 				trace("num:" + num);
 			}
 			//远程调用方法失败时响应该方法
-			receice.onFault = function(msg:String)
+			receice.onFault = function(msg:String):void
 			{
 				trace("fail:" + msg);
 			}
@@ -43,7 +43,7 @@ package
 			
 			
 			//被服务器呼叫的方法
-			netConnect.clientMethod = function(name:String,age:Number,obj:Object,arry:Array,map:IMap)
+			netConnect.clientMethod = function(name:String,age:Number,obj:Object,arry:Array,map:IMap):void
 			{
 				trace("默认对象");
 				trace("name：" + name);
@@ -53,7 +53,7 @@ package
 				trace("obj[msg]:" + obj["msg"]);
 				trace("obj[num]:" + obj["num"]);
 				trace("map:" + map);
-				var map2:IMap = map.get("map2");
+				var map2:IMap = IMap(map.get("map2"));
 				trace("map2:" + map2);
 				trace("map2.get(address):" + map2.get("address"));
 				trace("map2.get(main):" + map2.get("main"));
@@ -62,7 +62,7 @@ package
 			var clientObj:Object = new Object();
 			//注册到网络连接类里去
 			netConnect.addServerCall("client",clientObj);
-			clientObj.clientMethod = function(name:String,age:Number,obj:Object,arry:Array,map:IMap)
+			clientObj.clientMethod = function(name:String,age:Number,obj:Object,arry:Array,map:IMap):void
 			{
 				trace("自定义对象");
 				trace("name：" + name);
@@ -72,7 +72,7 @@ package
 				trace("obj[msg]:" + obj["msg"]);
 				trace("obj[num]:" + obj["num"]);
 				trace("map:" + map);
-				var map2:IMap = map.get("map2");
+				var map2:IMap = IMap(map.get("map2"));
 				trace("map2:" + map2);
 				trace("map2.get(address):" + map2.get("address"));
 				trace("map2.get(main):" + map2.get("main"));

@@ -32,7 +32,7 @@ package org.blue.xml
 			bean.setRedMethod(temp);
 			var ary:Array = xmlObj.childNodes[0].childNodes[1].childNodes;
 			var len:Number = ary.length;
-			for(var i = 0; i < len; i++)
+			for(var i:uint = 0; i < len; i++)
 			{
 				var obj:Object = ary[i].attributes;
 				if(obj["type"] == "object")
@@ -44,7 +44,7 @@ package org.blue.xml
 					var map:Object = new Object();
 					//trace("len2:" + len2);
 					
-					for(var j = 0; j < len2; j++)
+					for(var j:uint = 0; j < len2; j++)
 					{
 						var objs:Object = arry[j].attributes;
 						var tempObj:Object = setParam(objs);
@@ -60,7 +60,7 @@ package org.blue.xml
 					var arry:Array = xmlObj.childNodes[0].childNodes[1].childNodes[i].childNodes;
 					var len2:Number = arry.length;
 					var m:IMap = new HashMap();
-					for(var j = 0; j < len2; j++)
+					for(var j:uint = 0; j < len2; j++)
 					{
 						//��ȡ��������
 						var objs:Object = arry[j].attributes;
@@ -94,7 +94,7 @@ package org.blue.xml
 					var len2:Number = arry.length;
 					var dataArray:Array = new Array();
 					//trace("arry:" + arry + "11111");
-					for(var j = 0; j < len2; j++)
+					for(var j:uint = 0; j < len2; j++)
 					{
 						var objs:Object = arry[j].attributes;
 						if(typeValue == "string")

@@ -59,7 +59,7 @@ package org.blue.net
 		 */
 		public static function getConnectJavaServer():ConnectJavaServer
 		{
-			if(connec == undefined || connec == null)
+			if(connec == null)
 			{
 				connec = new ConnectJavaServer();
 			}
@@ -71,24 +71,23 @@ package org.blue.net
 		 */
 		private function serverMessage():void
 		{
-			var par = this;
-			par.onData = function(msg:String)
+			this.onData = function(msg:String):void
 			{
 				//trace("msg:" + msg);
 				var flag:Boolean = true;
 				//������Ϣ�Ƿ����xml�ļ�����������Ӧ���¼�
 				if(msg.indexOf("<send") == -1)
 				{
-					par["onConnect"](msg);
+					this["onConnect"](msg);
 					flag = false;
 				}
 				if(flag)
 				{
-					par.bean = par.parseXml.parseXmlString(msg);
-					var method:String = par.bean.getMethod();
+					this.bean = this.parseXml.parseXmlString(msg);
+					var method:String = this.bean.getMethod();
 					//trace("method:" + method);
 					//trace("par.bean.getServerName():" + par.bean.getServerName());
-					var server:String = par.bean.getServerName();
+					var server:String = this.bean.getServerName();
 					//��ݷ���������������Ϣ�����ö�Ӧ����Ķ�Ӧ����
 					//Ԥ�����������ɵĵ���
 					try
@@ -96,15 +95,15 @@ package org.blue.net
 						if(server == "null")
 						{
 							//����д�ڷ��������
-							par[method].apply(null,par.bean.getParams());
+							this[method].apply(null,this.bean.getParams());
 						}
 						else
 						{
 							//trace("par.listenters.get(server)[method]:" + par.listenters.get(server)[method]);
 							//par.listenters.get(server)[method]("soda");
 							//�Զ���һ�����󱻷���������
-							par.listenters.get(server)[method]
-								.apply(par.listenters.get(server),par.bean.getParams());
+							this.listenters.get(server)[method]
+								.apply(this.listenters.get(server),this.bean.getParams());
 						}
 					}
 					catch(error:Error)
@@ -121,21 +120,20 @@ package org.blue.net
 		 */
 		private function waitServer():void
 		{
-			var par = this;
-			par.onConnect = function(success:Boolean)
+			this.onConnect = function(success:Boolean):void
 			{
 				if(success)
 				{
 					//�������б?Ϊ�գ����ʾ�û��������Ĳ���
-					if(par.params[0] != undefined)
+					if(this.params[0] != undefined)
 					{
-						var len:Number = par.params.length;
-						for(var i = 0; i< len; i++)
+						var len:Number = this.params.length;
+						for(var i:uint = 0; i< len; i++)
 						{
-							arguments[i + 3] = par.params[i];
+							arguments[i + 3] = this.params[i];
 						}
 						//�Ѳ���ת����xml�ַ�
-						var msg:String = par.swtichXml.switchXmlString("this",arguments);
+						var msg:String = this.swtichXml.switchXmlString("this",arguments);
 						socket.send(msg + "\n");
 					}
 					else
@@ -146,7 +144,7 @@ package org.blue.net
 				else
 				{
 					//����ʧ��
-					par.debug("connect fail");
+					this.debug("connect fail");
 				}
 			};
 		}
@@ -174,9 +172,9 @@ package org.blue.net
 		 */
 		public function connect(url:String, port:Number):Boolean
 		{
-			var len = arguments.length;
+			var len:uint = arguments.length;
 			//�Ѳ�����ӵ���Ӧ��������
-			for(var i = 2; i < len; i++)
+			for(var i:uint = 2; i < len; i++)
 			{				
 				params.push(arguments[i]);
 			}
@@ -188,8 +186,8 @@ package org.blue.net
 		 */
 		public function setParams():void
 		{
-			var len = arguments.length;
-			for(var i = 2; i < len; i++)
+			var len:uint = arguments.length;
+			for(var i:uint = 2; i < len; i++)
 			{
 				params.push(arguments[i]);
 			}

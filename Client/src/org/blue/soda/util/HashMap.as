@@ -38,8 +38,8 @@
 		 */
 		public function put(key:String,value:Object):void
 		{
-			var temp = obj[key];
-			if(temp == undefined)
+			var temp:Object = obj[key];
+			if(temp)
 			{
 				obj[key] = value;
 				len++;
@@ -51,7 +51,7 @@
 		 * @param key 与指定值相关联的键.
 		 * @return 此映射中映射到指定值的键，如果此映射不包含该键的映射关系，则返回 null.
 		 */
-		public function get(key:String)
+		public function get(key:String):Object
 		{
 			return obj[key];
 		}
@@ -73,10 +73,10 @@
 		 * @param key 从映射中移除其映射关系的键
 		 * @return 以前与指定键相关联的值，如果没有该键的映射关系，则返回 null
 		 */
-		public function remove(key:String)
+		public function remove(key:String):Object
 		{
-			var temp = obj[key];
-			if(temp != undefined)
+			var temp:Object = obj[key];
+			if(temp)
 			{
 				delete obj[key];
 				len--;
@@ -113,8 +113,8 @@
 		 */
 		public function containsKey(key:String):Boolean
 		{
-			var temp = obj[key];
-			if(temp != undefined)
+			var temp:Object = obj[key];
+			if(temp)
 			{
 				return true;
 			}

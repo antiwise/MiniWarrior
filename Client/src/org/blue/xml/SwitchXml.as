@@ -19,7 +19,7 @@ package org.blue.xml
 		public function switchXmlString(id:String):String
 		{
 			arguments = arguments[1];
-			var len = arguments.length;
+			var len:uint = arguments.length;
 			var str:String = "<send type=\"call\">";
 			//��ӷ���˱����еĶ���
 			str = str + "<property type=\"thing\">";
@@ -29,7 +29,7 @@ package org.blue.xml
 			str = str + "<return-method>" + arguments[2] + "</return-method>";
 			str = str + "</property><content>";
 			//��ʱֻ���ַ����ֺ��߼�ֵ
-			for(var i = 3; i < len; i++)
+			for(var i:uint = 3; i < len; i++)
 			{
 				var tempString:String = typeof(arguments[i]);
 				//���object
@@ -40,7 +40,7 @@ package org.blue.xml
 					{
 						str = str + "<parameter type=\"array\" value=\"" + typeof(arguments[i][0]) + "\">";
 						var lenAry:Number = arguments[i].length;
-						for(var j = 0; j <lenAry; j++)
+						for(var j:uint = 0; j <lenAry; j++)
 						{
 							str = str + "<list value=\"" + arguments[i][j] + "\" />";
 						}

@@ -24,7 +24,7 @@
 		 * @param key 与指定值相关联的键.
 		 * @return 此映射中映射到指定值的键，如果此映射不包含该键的映射关系，则返回 null.
 		 */
-		function get(key:String);
+		function get(key:String):Object;
 		
 		/**
 		 * 从此映射中移除所有映射关系
@@ -36,7 +36,7 @@
 		 * @param key 从映射中移除其映射关系的键
 		 * @return 以前与指定键相关联的值，如果没有该键的映射关系，则返回 null
 		 */
-		function remove(key:String);
+		function remove(key:String):Object;
 		
 		/**
 		 * 返回此映射中的键-值映射关系数.
