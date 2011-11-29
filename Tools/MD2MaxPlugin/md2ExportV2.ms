@@ -5,7 +5,9 @@
 --Updated by Ruiner (http://www.netdoo.com/wodx)
 --New: Added Export Support for multiple object/mesh selections
 -------------------------------------------------------------------------
+fileIn "MD5MaterialExporter.ms"	-- MD5MaterialExporter functions
 
+global gmaterials = #();
 global gframename = "idle..........."
 global gAnimations = #()
 
@@ -56,11 +58,50 @@ struct AnimS
 	step
 )
 
+struct SkinS
+(
+	mat,
+	vstart,
+	count
+)
+
+fn hasMaterial ms m =
+(
+	for mtl in ms do
+	(
+		if m == mtl do return true
+	)
+	return false
+)
+	
 fn makemd2 object=
 (	
 	
-	md2=md2_model skinlist:#("SkinBitMap") texlist:#() trilist:#() framelist:#()
+	md2=md2_model skinlist:#() texlist:#() trilist:#() framelist:#()
 
+	------------------------------------
+	-- build skin material names list
+	------------------------------------  
+	local vnum
+	vnum = 0
+	for k = 1 to $selection.count do 
+	(
+		obj =	$selection[k]			
+		
+		local num = obj.numverts
+		skn = SkinS()		
+		local isok = hasMaterial gmaterials obj.material
+		if isok == false do
+		(
+			append gmaterials obj.material
+		)
+		skn.mat = obj.material
+		skn.vstart = vnum
+		skn.count = num;
+		vnum = vnum + num
+		append md2.skinlist skn	
+	)
+	
 	------------------------------------
 	-- build texture vert list
 	------------------------------------  
@@ -309,9 +350,11 @@ fn writemd2 obj md2file=
 	
 	for i in model.skinlist do
 	(
-		skinname=i
+		skinname=i.mat.name
 		while skinname.count<63 do skinname+=":"
 		writestring f skinname
+		--writeshort f i.vstart #unsigned
+		--writeshort f i.count #unsigned
 	)
 
 	-----------------------------------------------------
@@ -482,6 +525,10 @@ utility MD2Export "MD2 Exporter V2.0"
 		(				
 			addcheck (writemd2 $ md2filename)
 			md2lastfile=md2filename
+			-- export material
+			local mtlfullfile = md2filename
+			append mtlfullfile ".mtl"
+			exportSelectMaterials gmaterials mtlfullfile
 		)
 	)
 )
