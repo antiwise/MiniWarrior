@@ -261,8 +261,9 @@ package away3d.loaders.parsers
 			_uvs = new Vector.<Number>(_numST * 2);
 			_byteData.position = _offsetST;
 			for (var i : uint = 0; i < _numST; i++) {
-				_uvs[j++] = _byteData.readShort() / _skinWidth;
-				_uvs[j++] = _byteData.readShort() / _skinHeight;
+				_uvs[j++] = _byteData.readFloat();
+				_uvs[j++] = _byteData.readFloat();
+				trace(_uvs[i]);
 			}
 			
 			_parsedUV = true;
@@ -396,85 +397,6 @@ package away3d.loaders.parsers
 
 				for (j = 0; j < _numVertices; j++) {
 					tvertices.push(sx * _byteData.readUnsignedShort() + tx, sy * _byteData.readUnsignedShort() + ty, sz * _byteData.readUnsignedShort() + tz);
-				}
-				
-				k = 0;
-				for (j = 0; j < vertLen; j++) {
-					fvertices[k++] = tvertices[uint(_vertIndices[j] * 3)];
-					fvertices[k++] = tvertices[uint(_vertIndices[j] * 3 + 2)];
-					fvertices[k++] = tvertices[uint(_vertIndices[j] * 3 + 1)];
-				}
-				
-				subGeom.updateVertexData(fvertices);
-				subGeom.updateUVData(_finalUV);
-				subGeom.updateIndexData(_indices);
-				
-				var seq : VertexAnimationSequence = VertexAnimationSequence(_animator.getSequence(name));
-				if (!seq) {
-					seq = new VertexAnimationSequence(name);
-					_animator.addSequence(seq);
-				}
-				seq.addFrame(geometry, 1000 / FPS);
-			}
-			
-			
-			finalizeAsset(_animator);
-			_parsedFrames = true;
-		}
-		/**
-		 * Parses all the frame geometries.
-		 */
-		private function _parseFrames() : void
-		{
-			var sx : Number, sy : Number, sz : Number;
-			var tx : Number, ty : Number, tz : Number;
-			var geometry : Geometry;
-			var subGeom : SubGeometry;
-			var vertLen : uint = _vertIndices.length;
-			var fvertices : Vector.<Number>;
-			var tvertices : Vector.<Number>;
-			var i : uint, j : int, k : uint, ch : uint;
-			var name : String = "";
-			
-			_byteData.position = _offsetFrames;
-			
-			for (i = 0; i < _numFrames; i++) {
-				geometry = new Geometry();
-				
-				
-				subGeom = new SubGeometry();
-				_firstSubGeom ||= subGeom;				
-				geometry.addSubGeometry(subGeom);
-				tvertices = new Vector.<Number>();
-				fvertices = new Vector.<Number>(vertLen * 3, true);
-				
-				sx = _byteData.readFloat();
-				sy = _byteData.readFloat();
-				sz = _byteData.readFloat();
-				
-				tx = _byteData.readFloat();
-				ty = _byteData.readFloat();
-				tz = _byteData.readFloat();
-				
-				//read frame name
-				name = "";
-				k = 0;
-				for (j = 0; j < 16; j++) {
-					ch = _byteData.readUnsignedByte();
-					
-					if (uint(ch) >= 0x39 && uint(ch) <= 0x7A && k == 0) {
-						name += String.fromCharCode(ch);
-					}
-					
-					if (uint(ch) >= 0x30 && uint(ch) <= 0x39) {
-						k++;
-					}
-				}
-				
-				for (j = 0; j < _numVertices; j++) {
-					trace(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
-					//tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
-					tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
 				}
 				
 				k = 0;
