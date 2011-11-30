@@ -395,7 +395,7 @@ package away3d.loaders.parsers
 				}
 
 				for (j = 0; j < _numVertices; j++) {
-					tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
+					tvertices.push(sx * _byteData.readUnsignedShort() + tx, sy * _byteData.readUnsignedShort() + ty, sz * _byteData.readUnsignedShort() + tz);
 				}
 				
 				k = 0;
@@ -472,6 +472,8 @@ package away3d.loaders.parsers
 				}
 				
 				for (j = 0; j < _numVertices; j++) {
+					trace(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
+					//tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
 					tvertices.push(sx * _byteData.readUnsignedByte() + tx, sy * _byteData.readUnsignedByte() + ty, sz * _byteData.readUnsignedByte() + tz);
 				}
 				

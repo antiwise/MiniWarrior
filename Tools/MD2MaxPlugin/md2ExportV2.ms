@@ -72,6 +72,16 @@ fn hasMaterial ms m =
 	)
 	return false
 )
+
+fn roundNearZeroF f =
+(
+	if (f > 0.0) and (f <= 0.00009999999) then
+		do f *= 10 while f <= 0.00009999999
+	else if (f >= -0.0001111111) and (f < 0.0) do
+		do f *= 10 while (f >= -0.0001111111)
+	
+	return f
+)
 	
 fn makemd2 object=
 (	
@@ -111,8 +121,9 @@ fn makemd2 object=
 		
 		for i=1 to getnumtverts obj do
 		(
-			s=(((getTVert obj i).x)*256) as integer
-			t=((-(getTVert obj i).y+1)*256) as integer
+			s=roundNearZeroF ( (getTVert obj i).x )
+			t=roundNearZeroF ( 1-(getTVert obj i).y )
+			
 			append md2.texlist (md2_tex s:s t:t)
 		)
 	)
@@ -209,7 +220,6 @@ fn makemd2 object=
 		for f=astart to aend by anim.step do 
 		(
 			local vertlist=#()
-			local normlist=#()
 			frame=MD2_frame scale:[1,1,1] translate:[0,0,0] name:anim.name
 			vmin=[0,0,0]
 			vmax=[0,0,0]
@@ -220,9 +230,6 @@ fn makemd2 object=
 				for i=1 to obj.numverts do at time f
 				(
 					local v=in coordsys world(getvert obj i)
-					--v+=object.pos
-					--v*=object.scale
-					--v-=object.pos
 					if v.x<vmin.x do vmin.x=v.x
 					if v.y<vmin.y do vmin.y=v.y
 					if v.z<vmin.z do vmin.z=v.z
@@ -232,7 +239,7 @@ fn makemd2 object=
 				)
 			)
 			frame.translate=vmin
-			frame.scale=(vmax-vmin)/[255,255,255]
+			frame.scale=(vmax-vmin)/[65535,65535,65535]
 		
 			for k = 1 to $selection.count do 
 			(
@@ -240,9 +247,6 @@ fn makemd2 object=
 				for i=1 to obj.numverts do at time f
 				(
 					local v=in coordsys world (getvert obj i)
-					--v+=object.pos
-					--v*=object.scale
-					--v-=object.pos
 					v-=frame.translate
 					v/=frame.scale
 					append vertlist v
@@ -287,9 +291,9 @@ fn writemd2 obj md2file=
 	trinum=model.trilist.count
 	glnum=0
 	
-	texsize=4
+	texsize=8
 	trisize=12
-	framesize=40+(3*vertnum)
+	framesize=40+(6*vertnum)
 	
 	headersize=68				-- bytes in header
 	offsetskins=headersize
@@ -340,8 +344,8 @@ fn writemd2 obj md2file=
 	
 	for i in model.texlist do
 	(
-		writeshort f i.s #unsigned
-		writeshort f i.t #unsigned
+		writefloat f i.s
+		writefloat f i.t
 	)
 	
 	-----------------------------------------------------
@@ -374,9 +378,9 @@ fn writemd2 obj md2file=
 		k=0
 		for j=1 to i.vlist.count do
 		(
-			writebyte f i.vlist[j].x
-			writebyte f i.vlist[j].y
-			writebyte f i.vlist[j].z
+			writeshort f i.vlist[j].x #unsigned
+			writeshort f i.vlist[j].y #unsigned
+			writeshort f i.vlist[j].z #unsigned
 		)
 	)
 	------------------------------------------------------
@@ -387,23 +391,21 @@ fn writemd2 obj md2file=
 )
 
 
-utility MD2Export "MD2 Exporter V2.0"
+utility MD2Export "MD2 Exporter V3.0"
 (
 	group "Export"
 	(
-		checkbox oneframe "Save Animation" checked:true align:#center
+		checkbox oneframe "Save Animation" checked:true align:#left
 		spinner stepframe "Frame Step" range:[1,200,1] fieldwidth:40 type:#integer
-		radiobuttons useanim labels:#("Active Time Segment","Custom Time Segment")
-		spinner animstart range:[0,1000,0] type:#integer fieldwidth:40 across:2
+		spinner animstart range:[0,1000,0] type:#integer fieldwidth:40 across:2 align:#left
 		spinner animend "to" range:[0,1000,40] type:#integer fieldwidth:40
 	
 		edittext 	frameName "Frame Name:" labelOnTop:true
-		checkbox donormals "Generate Normals" align:#center checked:false
 		
-		button btnAddFrame "Add" pos:[12,190] width:56 height:18
-		button btnRemoveFrame "Remove" pos:[80,190] width:64 height:18
+		button btnAddFrame "Add" pos:[12,140] width:56 height:18
+		button btnRemoveFrame "Remove" pos:[80,140] width:64 height:18
 		
-		listbox lbxNodes "Frame to export:" pos:[8,210] width:144 height:8
+		listbox lbxNodes "Frame to export:" pos:[8,170] width:144 height:8
 		
 		
 		button bexport "     Export    "
@@ -437,20 +439,16 @@ utility MD2Export "MD2 Exporter V2.0"
 		(
 			anim = AnimS()
 			anim.name=fname
-			if useanim.state==1 then 
-			(
-				anim.start=animationrange.start
-				anim.end=animationrange.end
-			)
-			else
+		
+			if (oneframe.state) then 
 			(
 				anim.start=animstart.value 
 				anim.end=animend.value
-			)	
-			if not(oneframe.state) do 
+			)
+			else
 			(
 				anim.start=1
-				anim.end=1
+				anim.end=1				
 			)
 		
 			anim.step = stepframe.value
