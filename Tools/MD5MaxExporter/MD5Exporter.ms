@@ -12,11 +12,11 @@ struct AnimS
 	end,
 	step
 )
-rollout roMD5MeshAnim "Mesh & Animation" width:160 height:584
+utility MD5Export "MD5 Exporter V3.0"
 (
 	-- Order of the rollout components matter! --
 	
-	spinner spnBaseFrame "Frame Step" range:[1,200,1] fieldwidth:40 type:#integer	
+	spinner spnBaseFrame "Base Frame" range:[1,200,1] fieldwidth:60 type:#integer	
 	spinner spnStartFrame range:[0,1000,0] type:#integer fieldwidth:40 across:2 align:#left
 	spinner spnEndFrame "to" range:[0,1000,40] type:#integer fieldwidth:40
 	edittext 	frameName "Frame Name:" labelOnTop:true
@@ -128,7 +128,13 @@ rollout roMD5MeshAnim "Mesh & Animation" width:160 height:584
 			anim.step = spnBaseFrame.value
 			
 			append gAnimations anim
-			animNodes.items += #(fname)
+			local nodename
+			nodename = copy fname
+			append nodename "--Key : "
+			append nodename (anim.start as String)
+			append nodename " to "
+			append nodename (anim.end as String)
+			animNodes.items += #(nodename)
 		)
 		else
 		(
@@ -224,7 +230,7 @@ rollout roMD5MeshAnim "Mesh & Animation" width:160 height:584
 				if meshFileName != undefined do
 				(
 					md5Exp = MD5MeshExporter()
-					local bOk = md5Exp.doExport nodeList meshFileName
+					local bOk = md5Exp.doExport nodeList gAnimations meshFileName
 	
 					if bOk == true do
 						messageBox "MD5Mesh exported successfully!" title: ".::MD5Exporter::."
@@ -285,7 +291,7 @@ rollout roMD5MeshAnim "Mesh & Animation" width:160 height:584
 				(
 					-- Export!
 					md5Exp = MD5MeshExporter()
-					bOk = md5Exp.doExport nodeList meshFileName
+					bOk = md5Exp.doExport nodeList gAnimations meshFileName
 	
 					if bOk == false do
 						messageBox "MD5Mesh export failed!" title: ".::MD5Exporter::."
@@ -294,14 +300,26 @@ rollout roMD5MeshAnim "Mesh & Animation" width:160 height:584
 				-- If MD5Mesh was exported, go for MD5Anim
 				if bOk == true do
 				(		
-					local animFileName = getSavePath() 
+					--local animFileName = getSavePath() 
+					local animfile
+					local x
+					x = 0
+					for i=1 to meshFileName.count do
+					(
+						if (meshFileName[i] == "\\") do 
+						(
+							x = i - 1
+						)
+					)
+					animfile = substring meshFileName 1 x
+					
 					md5Exp = MD5AnimExporter()
-					if animFileName != undefined do
+					if animfile != undefined do
 					(
 						for anim in gAnimations do
 						(
 							local filename		
-							filename = copy animFileName
+							filename = copy animfile
 							append filename "\\"
 							append filename anim.name
 							append filename ".md5anim"
@@ -339,11 +357,3 @@ rollout roMD5MeshAnim "Mesh & Animation" width:160 height:584
 		)
 	)
 )
--- Let the show begins! :P --
-
-if md5Exporter != undefined do
-(
-	closeRolloutFloater md5Exporter
-)
-md5Exporter = newRolloutFloater "MD5 Exporter" 172 580
-addRollout roMD5MeshAnim md5Exporter

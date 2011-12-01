@@ -182,7 +182,7 @@ struct MD5MeshExporter
 	-- Function: doExport
 	-- Description: exports the bones in the scene and the nodes in "nodeList" to "fileName" file
 	-- Return: returns true on success, otherwise returns false
-	fn doExport nodeList fileName =
+	fn doExport nodeList Anims fileName =
 	(
 		-- Create the md5mesh file to write in
 		local fp = createFile fileName
@@ -254,6 +254,7 @@ struct MD5MeshExporter
 		format "mtllib %\n" mtlfile to: fp
 		format "numJoints %\n" joints.count to: fp
 		format "numMeshes %\n\n" (countSubMeshes nodeList) to: fp
+		format "numAnims %\n\n" Anims.count to: fp
 	
 		-- Write bone list --
 	
@@ -481,6 +482,16 @@ struct MD5MeshExporter
 			gc()
 		)
 		
+		format "Anims {\n" to: fp
+		for anim in gAnimations do
+		(
+			local fname
+			fname = copy anim.name
+			append fname ".md5anim"
+			format "\t%\n" fname to: fp
+		)
+		format "}\n\n" to: fp
+					
 		local mtlfullfile = fileName
 		append mtlfullfile ".mtl"
 		exportSelectMaterials gmaterials mtlfullfile

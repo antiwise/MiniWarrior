@@ -61,7 +61,9 @@ struct SkinS
 (
 	mat,
 	vstart,
-	count
+	vcount,
+	fstart,
+	fcount
 )
 
 fn hasMaterial ms m =
@@ -91,13 +93,16 @@ fn makemd2 object=
 	------------------------------------
 	-- build skin material names list
 	------------------------------------  
-	local vnum
-	vnum = 0
+	local vlength
+	local flength
+	vlength = 0
+	flength = 0
 	for k = 1 to $selection.count do 
 	(
 		obj =	$selection[k]			
 		
-		local num = obj.numverts
+		local vnum = obj.numverts
+		local fnum = obj.numfaces
 		skn = SkinS()		
 		local isok = hasMaterial gmaterials obj.material
 		if isok == false do
@@ -105,9 +110,12 @@ fn makemd2 object=
 			append gmaterials obj.material
 		)
 		skn.mat = obj.material
-		skn.vstart = vnum
-		skn.count = num;
-		vnum = vnum + num
+		skn.vstart = vlength
+		skn.vcount = vnum
+		skn.fstart = flength
+		skn.fcount = fnum
+		vlength = vlength + vnum
+		flength = flength + fnum
 		append md2.skinlist skn	
 	)
 	
@@ -297,7 +305,7 @@ fn writemd2 obj md2file=
 	
 	headersize=68				-- bytes in header
 	offsetskins=headersize
-	offsettexcoords=offsetskins+(skinnum*(64 + 4))
+	offsettexcoords=offsetskins+(skinnum*(64 + 8))
 	offsettris=offsettexcoords+(texnum*texsize)
 	offsetframes=offsettris+(trinum*trisize)
 	offsetgl=offsetframes+(framenum*framesize)
@@ -334,8 +342,10 @@ fn writemd2 obj md2file=
 		skinname=i.mat.name
 		while skinname.count<63 do skinname+=":"
 		writestring f skinname
-		writeshort f i.vstart #unsigned
-		writeshort f i.count  #unsigned
+		writeshort f i.vstart  #unsigned
+		writeshort f i.vcount  #unsigned
+		writeshort f i.fstart  #unsigned
+		writeshort f i.fcount  #unsigned
 	)
 
 	-----------------------------------------------------
@@ -453,7 +463,20 @@ utility MD2Export "MD2 Exporter V3.0"
 		
 			anim.step = stepframe.value
 			append gAnimations anim
-			lbxNodes.items += #(fname)
+			
+			
+			local x = findString fname "."
+			x = x - 1 
+			local animname = substring fname 1 x
+					
+			local nodename
+			nodename = copy animname
+			append nodename "--Key : "
+			append nodename (anim.start as String)
+			append nodename " to "
+			append nodename (anim.end as String)
+			
+			lbxNodes.items += #(nodename)
 		)
 		else
 		(
