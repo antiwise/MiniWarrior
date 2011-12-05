@@ -1,6 +1,8 @@
 package com.editor.components
 {
 	import away3d.entities.Mesh;
+	import away3d.materials.MaterialBase;
+	import away3d.materials.BitmapMaterial;;
 	
 	import org.aswing.ASColor;
 	import org.aswing.BorderLayout;
@@ -61,7 +63,10 @@ package com.editor.components
 			return cancelButton;
 		}
 		protected function colorChanged(e:InteractiveEvent):void{
-			trace("colorChanged");
+			trace(AbstractColorChooserPanel(e.target).getSelectedColor().getRGB());
+			BitmapMaterial(_model.material).diffuseMethod.diffuseColor=
+		    BitmapMaterial(_model.material).ambientMethod.ambientColor=
+			BitmapMaterial(_model.material).ambientColor = AbstractColorChooserPanel(e.target).getSelectedColor().getRGB();
 		}
 
 	}
