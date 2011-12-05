@@ -48,21 +48,21 @@ package com.editor.ui.views.materialview
 
 			var rPanel:JPanel = new JPanel();
 			append( rPanel, BorderLayout.EAST );
-			rPanel.append( _valueStepper = new JStepper() );
 			rPanel.append( _slider = new JSlider() );
-			rPanel.append( new JLabel( "min" ) );
-			rPanel.append( _minStepper = new JStepper() );
-			rPanel.append( new JLabel( "max" ) );
-			rPanel.append( _maxStepper = new JStepper() );
+			rPanel.append( _valueStepper = new JStepper() );			
+			//rPanel.append( new JLabel( "min" ) );
+			//rPanel.append( _minStepper = new JStepper() );
+			//rPanel.append( new JLabel( "max" ) );
+			//rPanel.append( _maxStepper = new JStepper() );
 
-			_minStepper.setMinimum( -1000 );
-			_minStepper.setMaximum( 1000 );
+			//_minStepper.setMinimum( -1000 );
+			//_minStepper.setMaximum( 1000 );
 
-			_maxStepper.setMinimum( -1000 );
-			_maxStepper.setMaximum( 1000 );
+			//_maxStepper.setMinimum( -1000 );
+			//_maxStepper.setMaximum( 1000 );
 
-			_minStepper.addEventListener( AWEvent.ACT, minStepperChangedHandler );
-			_maxStepper.addEventListener( AWEvent.ACT, maxStepperChangedHandler );
+			//_minStepper.addEventListener( AWEvent.ACT, minStepperChangedHandler );
+			//_maxStepper.addEventListener( AWEvent.ACT, maxStepperChangedHandler );
 
 			_slider.addEventListener( InteractiveEvent.STATE_CHANGED, sliderStateChangedHandler );
 
@@ -104,8 +104,8 @@ package com.editor.ui.views.materialview
 		private function enable( enabled:Boolean = true ):void {
 
 			_slider.setEnabled( enabled );
-			_minStepper.setEnabled( enabled );
-			_maxStepper.setEnabled( enabled );
+			//_minStepper.setEnabled( enabled );
+			//_maxStepper.setEnabled( enabled );
 			_valueStepper.setEnabled( enabled );
 		}
 
@@ -122,8 +122,8 @@ package com.editor.ui.views.materialview
 			// TODO: re-ranging behaves freakish-ly?
 
 			var range:Point = _constant.compRanges[ _targetComponentIndex ];
-			_minStepper.setValue( range.x );
-			_maxStepper.setValue( range.y );
+			//_minStepper.setValue( range.x );
+			//_maxStepper.setValue( range.y );
 
 			updateRangeFromPoint( range );
 			updateSliderFromConstant();
@@ -161,14 +161,14 @@ package com.editor.ui.views.materialview
 
 		private function minStepperChangedHandler( event:AWEvent ):void {
 			var range:Point = _constant.compRanges[ _targetComponentIndex ];
-			range.x = _minStepper.getValue();
+			//srange.x = _minStepper.getValue();
 			updateRangeFromPoint( range );
 			updateSliderFromConstant();
 		}
 
 		private function maxStepperChangedHandler( event:AWEvent ):void {
 			var range:Point = _constant.compRanges[ _targetComponentIndex ];
-			range.y = _maxStepper.getValue();
+			//range.y = _maxStepper.getValue();
 			updateRangeFromPoint( range );
 			updateSliderFromConstant();
 		}

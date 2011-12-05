@@ -22,8 +22,7 @@ package com.editor.ui.views.materialview
 		}
 
 		private function onMaterialSet( material:MaterialBase ):void {
-			//view.vertConstants.material = material;
-			//view.fragConstants.material = material;
+			view.material = material;
 		}
 	}
 }

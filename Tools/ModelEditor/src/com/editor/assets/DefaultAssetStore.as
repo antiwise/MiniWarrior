@@ -34,10 +34,6 @@ package com.editor.assets
 			modelRequestedSignal = new Signal( Mesh );
 
 			setTimeout( function():void {
-
-				getVertexColorMaterial();
-				getAdvancedPhongBitmapMaterial();
-
 				getHeadModel();
 
 			}, 200 );
@@ -68,89 +64,8 @@ package com.editor.assets
 			_model = new Cube(_material);
 			
 			modelRequestedSignal.dispatch( _model );
+			materialRequestedSignal.dispatch( _material );
 			return _model;
-		}
-
-		public function getCubeModel():Mesh {
-			_material = new BitmapMaterial();
-			_model = new Cube(_material);
-			modelRequestedSignal.dispatch( _model );
-			return _model;
-		}
-
-		public function getSphereModel():Mesh {
-			_material = new BitmapMaterial();
-			_model  = new Sphere(_material);
-			modelRequestedSignal.dispatch( _model );
-			return _model;
-		}
-
-		public function getTorusModel():Mesh {
-			//_model = new Torus( _material, 0.8, 0.3 );
-			modelRequestedSignal.dispatch( _model );
-			return _model;
-		}
-
-		public function getPlaneModel():Mesh {
-			_material = new BitmapMaterial();
-			_model = new Plane(_material);
-			modelRequestedSignal.dispatch( _model );
-			return _model;
-		}
-
-		// ---------------------------------------------------------------------
-		// Shaders
-		// ---------------------------------------------------------------------
-
-		public function getExploderMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getWireframeMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getVertexColorMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getEnviroSphericalMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getSimplestMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getPhongColorMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getAdvancedPhongBitmapMaterial():MaterialBase {
-
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getBasicPhongBitmapMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getBitmapMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
-		}
-
-		public function getEmptyMaterial():MaterialBase {
-			materialRequestedSignal.dispatch( _material );
-			return _material;
 		}
 	}
 }

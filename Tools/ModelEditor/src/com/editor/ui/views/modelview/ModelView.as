@@ -1,17 +1,14 @@
 package com.editor.ui.views.modelview
 {
-
-	import org.junkbyte.console.Cc;
 	import com.editor.components.JTitledPanel;
-	import com.editor.ui.views.modelview.XYZSetterPopUp;
 	import com.editor.assets.DefaultAssetStore;
 	import com.editor.Get3D;
 	
 	import away3d.entities.Mesh;
 	
-	
 	import flash.utils.ByteArray;
 
+	import org.junkbyte.console.Cc;
 	import org.aswing.JButton;
 	import org.aswing.JCheckBox;
 	import org.aswing.JComboBox;
@@ -29,7 +26,7 @@ package com.editor.ui.views.modelview
 		private var _positionBtn:JButton;
 		private var _rotationBtn:JButton;
 		private var _scaleBtn:JButton;
-		private var _modelCombo:JComboBox;
+		private var _colorBtn:JButton;
 		private var _bothsidesChk:JCheckBox;
 
 		public function ModelView() {
@@ -38,22 +35,17 @@ package com.editor.ui.views.modelview
 
 			setName( "Model" );
 
-			_modelCombo = new JComboBox( _models );
-			_modelCombo.setSelectedIndex( 0 );
-
 			_positionBtn = new JButton( "Position" );
 			_rotationBtn = new JButton( "Rotation" );
 			_scaleBtn = new JButton( "Scale" );
-
-			var geometry:JPanel = new JPanel( new SoftBoxLayout( SoftBoxLayout.Y_AXIS ) );
-			geometry.setBorder( new TitledBorder( null, "Geometry" ) );
-			geometry.append( _modelCombo );
+			_colorBtn = new JButton( "Color" );
 
 			var transform:JPanel = new JPanel( new SoftBoxLayout( SoftBoxLayout.Y_AXIS ) );
 			transform.setBorder( new TitledBorder( null, "Transform" ) );
 			transform.append( _positionBtn );
 			transform.append( _rotationBtn );
 			transform.append( _scaleBtn );
+			transform.append( _colorBtn );
 
 			var options:JPanel = new JPanel( new SoftBoxLayout( SoftBoxLayout.Y_AXIS ) );
 			options.setBorder( new TitledBorder( null, "Mesh Options" ) );
@@ -63,11 +55,8 @@ package com.editor.ui.views.modelview
 			options.append( _bothsidesChk );
 
 			contentPanel.setLayout( new SoftBoxLayout( SoftBoxLayout.Y_AXIS ) );
-			//contentPanel.append( geometry );
 			contentPanel.append( transform );
 			contentPanel.append( options );
-
-			_modelCombo.addEventListener( AWEvent.ACT, modelComboChangedHandler );
 
 			_positionBtn.addEventListener( AWEvent.ACT, function( event:AWEvent ):void {
 				var pop:XYZSetterPopUp = new XYZSetterPopUp( XYZSetterPopUp.POSITION, _model );
@@ -89,6 +78,14 @@ package com.editor.ui.views.modelview
 				_scaleBtn.setEnabled( false );
 				centerPopUp( pop );
 			});
+			
+			_colorBtn.addEventListener( AWEvent.ACT, function( event:AWEvent ):void {
+				var pop:ColorSetterPopUp = new ColorSetterPopUp( "Color", _model );
+				pop.addEventListener( FrameEvent.FRAME_CLOSING, popUpClosedHandler );
+				//_colorBtn.setEnabled( false );
+				centerPopUp( pop );
+			});
+			
 		}
 
 		private function bothsidesChkClicked( event:AWEvent ):void {
@@ -110,6 +107,10 @@ package com.editor.ui.views.modelview
 					_scaleBtn.setEnabled( true );
 					break;
 				}
+				case ColorSetterPopUp.COLOR: {
+					_colorBtn.setEnabled( true );
+					break;
+				}
 			}
 		}
 
@@ -118,48 +119,6 @@ package com.editor.ui.views.modelview
 					stage.stageWidth / 2 - popUp.width / 2,
 					stage.stageHeight / 2 - popUp.height / 2
 			) );
-		}
-
-		private var _models:Array = [ "Head", "Hard Head", "Cube", "Sphere", "Hard Torus", "Plane", "Load Obj" ];
-
-		private function modelComboChangedHandler( event:AWEvent ):void {
-
-			Get3D.instance.view.scene.removeChild(_model);
-			switch( _modelCombo.getSelectedIndex() ) {
-				case 0: {
-					_model = DefaultAssetStore.instance.getHeadModel();
-					break;
-				}
-				case 1: {
-					_model = DefaultAssetStore.instance.getHeadModel();
-					//_model.forceVertexNormalsToTriangleNormals();
-					break;
-				}
-				case 2: {
-					_model = DefaultAssetStore.instance.getCubeModel();
-					break;
-				}
-				case 3: {
-					_model = DefaultAssetStore.instance.getSphereModel();
-					break;
-				}
-				case 4: {
-					_model = DefaultAssetStore.instance.getTorusModel();
-					break;
-				}
-				case 5: {
-					_model = DefaultAssetStore.instance.getPlaneModel();
-					break;
-				}
-
-			}
-
-			//Cc.debug( "Changed model: " + _model.aabb );
-		}
-
-		private function onObjDataFetched( data:ByteArray ):void {
-			//_model = DefaultAssetStore.instance.getLoadedModel( data );
-			//Cc.debug( "Loaded model: " + _model. );
 		}
 
 		public function set model( model:Mesh ):void {

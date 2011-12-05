@@ -2,14 +2,15 @@ package com.editor.components
 {
 	import com.editor.utils.RegisterPopUpManager;
 	import com.editor.utils.AGALRegister;
+	import com.editor.components.utils.IconListCell;
 	
 	import away3d.materials.MaterialBase;
 	
 	import flash.events.Event;
 	import flash.geom.Point;
 	
-	import org.aswing.JButton;
-	import org.aswing.JList;
+	import org.aswing.*;
+	import org.aswing.border.LineBorder;
 	import org.aswing.geom.IntPoint;
 	import org.aswing.SoftBoxLayout;
 	import org.aswing.event.AWEvent;
@@ -34,7 +35,8 @@ package com.editor.components
 			_listData = [];
 			_popUpClass = popUpClass;
 
-			_list = new JList( new RegisterListModel( _listData ) );
+			_list = new JList( new RegisterListModel( _listData ), new GeneralListCellFactory(IconListCell, false, false));
+			_list.setBorder(new LineBorder(null, new ASColor(0x333333), 2));
 			_list.addEventListener( ListItemEvent.ITEM_CLICK, listItemClickedHandler );
 
 			contentPanel.setLayout( new SoftBoxLayout( SoftBoxLayout.Y_AXIS ) );

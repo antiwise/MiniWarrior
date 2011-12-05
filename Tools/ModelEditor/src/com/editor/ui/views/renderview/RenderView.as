@@ -3,6 +3,7 @@ package com.editor.ui.views.renderview
 
 	import away3d.entities.Mesh;
 	import away3d.containers.View3D;
+	import away3d.primitives.WireframePlane;
 	import away3d.debug.AwayStats;
 	
 	import com.editor.Get3D;
@@ -41,6 +42,7 @@ package com.editor.ui.views.renderview
 			Get3D.instance.view = _view;
 			addChild(_view);
 			addChild(new AwayStats(_view));
+			_view.scene.addChild(new WireframePlane(1000,1000,10,10,0x555555,1,"xz"));
 			
 			_view.addEventListener( MouseEvent.MOUSE_DOWN, viewMouseDownHandler );
 			_view.addEventListener( MouseEvent.MOUSE_UP, viewMouseUpHandler );
