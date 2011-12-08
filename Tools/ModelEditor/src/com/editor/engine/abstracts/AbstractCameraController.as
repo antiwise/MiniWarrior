@@ -1,0 +1,4 @@
+package com.editor.engine.abstracts{	import com.editor.engine.camera.AnimationControl;		import com.editor.engine.interfaces.ICameraController;
+	import com.editor.engine.vo.SceneCameraVO;
+	
+	import flash.events.EventDispatcher;				public class AbstractCameraController extends EventDispatcher implements ICameraController	{		public var update : String ;		public var startCamera : SceneCameraVO ;		public var animationControl : String = AnimationControl.INTERNAL ;								public function AbstractCameraController ( )		{			super ( ) ;		}								////////////////////////////////////////////////////////////////////////////////		//		// Public Methods		//		////////////////////////////////////////////////////////////////////////////////								public function navigateTo ( vo : SceneCameraVO ) : void		{		}								public function teleportTo ( vo : SceneCameraVO ) : void		{		}	}}

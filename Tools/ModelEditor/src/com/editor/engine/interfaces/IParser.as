@@ -1,0 +1,1 @@
+package com.editor.engine.interfaces{	public interface IParser	{		function parse ( data : * ) : void	}}
