@@ -1,0 +1,1 @@
+package com.editor.engine.interfaces{	public interface ISerialize	{		function serialize ( data : * , type : String = "read" ) : void	}}
